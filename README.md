@@ -8,6 +8,16 @@
 
 ---
 
+## 🖼️ Preview
+
+### Generate CSR Tab
+![CSR Tab](screenshots/csr_tab.png)
+
+### PEM Builder Tab
+![PEM Builder Tab](screenshots/pem_builder_tab.png)
+
+---
+
 ## 🚀 Features
 
 - 🔐 **Generate CSRs** with full subject + SAN fields
@@ -29,6 +39,7 @@ csr-generator/
 ├── CSRGenerator.desktop            # Linux .desktop launcher
 ├── AppDir/                         # AppImage structure
 ├── ghosttrap.ico                   # Placeholder icon
+├── screenshots/                    # App screenshots
 └── LICENSE                         # MIT License
 ```
 
