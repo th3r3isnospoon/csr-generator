@@ -1,9 +1,40 @@
-# CSR Generator GUI
+# CSR Generator GUI 🛡️🔐
 
-A cross-platform Python GUI for generating and viewing CSRs, decoding certificates, and building PEM bundles.  
-Includes dark mode, SAN support, and optional self-signed cert generation.
+![MIT License](https://img.shields.io/badge/license-MIT-green.svg)
+![Platform](https://img.shields.io/badge/platform-linux%20%7C%20windows-blue.svg)
+![Python](https://img.shields.io/badge/python-3.6%2B-yellow.svg)
 
-## 🧰 Requirements
+> Generate CSRs, decode certs, build PEMs — all in a friendly cross-platform GUI.
+
+---
+
+## 🚀 Features
+
+- 🔐 **Generate CSRs** with full subject + SAN fields
+- 🌙 **Dark mode** toggle
+- 🧠 **CSR & Certificate decoder** with OpenSSL output
+- 🧱 **PEM bundle builder** with support for intermediate & root chaining
+- 🧰 **AppImage & Windows .exe support**
+- ✅ Drag-and-drop support (for decoder tabs)
+- 🧪 Self-signed cert toggle
+
+---
+
+## 📦 Project Structure
+
+```
+csr-generator/
+├── csr_generator_gui_full.py       # Main Python GUI script
+├── build_exe.bat                   # Windows builder
+├── CSRGenerator.desktop            # Linux .desktop launcher
+├── AppDir/                         # AppImage structure
+├── ghosttrap.ico                   # Placeholder icon
+└── LICENSE                         # MIT License
+```
+
+---
+
+## 🔧 Getting Started
 
 ### Linux:
 ```bash
@@ -12,14 +43,22 @@ python3 csr_generator_gui_full.py
 ```
 
 ### Windows:
-Run the included `build_exe.bat` to generate a portable `.exe` with PyInstaller.
+- Double-click `build_exe.bat` to create `CSR_Generator_GUI.exe` using PyInstaller.
 
-## 🧱 AppImage Build
-Unzip the `AppDir` folder and run `appimagetool` to create a standalone `.AppImage`.
+### AppImage:
+```bash
+./appimagetool-x86_64.AppImage CSR-GUI.AppDir
+```
 
-## 🧪 Features
-- CSR Generator with full subject + SAN support
-- Self-signed certificate toggle
-- PEM builder with intermediate & root chaining
-- Certificate and CSR viewer
-- Dark mode 🌙
+---
+
+## 🙌 Contributing
+
+Pull requests welcome! Start by opening an issue or a feature request.  
+Contributions, bug reports, and feedback are all appreciated ❤️
+
+---
+
+## 📄 License
+
+MIT © [Mike Binkowski](https://github.com/th3r3isnospoon)
