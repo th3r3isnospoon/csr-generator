@@ -322,7 +322,6 @@ def build_pem():
 about_text = """CSR Generator v1.0
 
 Created by: Mike Binkowski
-Email: binky1@gmail.com
 GitHub: https://github.com/th3r3isnospoon
 MIT Licensed"""
 tk.Label(about_tab, text=about_text, justify="left", padx=10, pady=10).pack(anchor="nw")
