@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=CSR Generator GUI
+Exec=csr_generator_gui_full.py
+Icon=csr
+Categories=Utility;

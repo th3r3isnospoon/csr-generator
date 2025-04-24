@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=CSR Generator GUI
+Comment=Launch the certificate generator app
+Exec=python3 csr_generator_gui_full.py
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=Utility;
