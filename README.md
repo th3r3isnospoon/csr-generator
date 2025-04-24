@@ -4,7 +4,9 @@
 ![Platform](https://img.shields.io/badge/platform-linux%20%7C%20windows-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.6%2B-yellow.svg)
 
-> Generate CSRs, decode certs, build PEMs — all in a friendly cross-platform GUI.
+<p align="center">
+  <img src="screenshots/logo.png" alt="CSR Generator Logo" width="200"/>
+</p>
 
 ---
 
@@ -39,7 +41,7 @@ csr-generator/
 ├── CSRGenerator.desktop            # Linux .desktop launcher
 ├── AppDir/                         # AppImage structure
 ├── ghosttrap.ico                   # Placeholder icon
-├── screenshots/                    # App screenshots
+├── screenshots/                    # App screenshots & logo
 └── LICENSE                         # MIT License
 ```
 
