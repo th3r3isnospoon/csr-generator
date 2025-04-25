@@ -2,14 +2,14 @@ name: Build Windows EXE
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - 'v*'
+      - 'v*'   # Only run when you push a tag like v1.1, v1.2
 
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write   # <-- needed for uploading to releases
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,8 +28,7 @@ jobs:
         run: |
           pyinstaller --onefile --windowed --icon=ghosttrap.ico csr_generator_gui_full.py
 
-      - name: Upload EXE Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: CSR_Generator_GUI
-          path: dist/csr_generator_gui_full.exe
+          files: dist/csr_generator_gui_full.exe
