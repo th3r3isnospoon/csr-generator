@@ -25,11 +25,11 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller csr_generator_gui_full.py --onefile --noconsole
+        pyinstaller csr_generator_gui_full.py --onefile --noconsole --name csr_generator_gui_${{ github.ref_name }}
 
     - name: Upload EXE
       uses: softprops/action-gh-release@v2
       with:
-        files: dist/csr_generator_gui_full.exe
+        files: dist/csr_generator_gui_${{ github.ref_name }}.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
