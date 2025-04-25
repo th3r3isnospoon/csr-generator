@@ -9,9 +9,8 @@ import re
 # Check Ed25519 support
 openssl_ver = subprocess.getoutput("openssl version")
 ed25519_supported = "OpenSSL 3" in openssl_ver or "OpenSSL 1.1.1" in openssl_ver
-
 root = tk.Tk()
-root.title("CSR Generator v1.1-dev")
+root.title("CSR Generator v1.1")
 root.geometry("720x720")
 
 style = ttk.Style()
@@ -39,16 +38,14 @@ def apply_theme():
 
     for container in [frm, viewer_tab, cert_tab, pem_tab, about_tab]:
         for widget in container.winfo_children():
-            cls = widget.__class__.__name__
-            if cls in ("Text", "ScrolledText"):
+            if isinstance(widget, (tk.Text, scrolledtext.ScrolledText)):
                 current_text = widget.get("1.0", tk.END)
                 widget.configure(bg=entry_bg, fg=fg, insertbackground=fg)
                 widget.delete("1.0", tk.END)
                 widget.insert("1.0", current_text)
-            elif cls == "Button" and isinstance(widget, tk.Button):
+            elif isinstance(widget, tk.Button):
                 widget.configure(bg=bg, fg=fg, activebackground=bg)
 
-# --- Header with theme toggle ---
 def toggle_dark_icon():
     dark_mode.set(not dark_mode.get())
     theme_button.config(text="🌙" if not dark_mode.get() else "☀️")
@@ -72,6 +69,21 @@ notebook.add(cert_tab, text="Cert Decoder")
 notebook.add(pem_tab, text="PEM Builder")
 notebook.add(about_tab, text="About")
 notebook.pack(fill=tk.BOTH, expand=True)
+
+# --- Placeholder Helper ---
+def add_placeholder(entry, placeholder_text):
+    def on_focus_in(event):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.config(fg="black")
+    def on_focus_out(event):
+        if not entry.get():
+            entry.insert(0, placeholder_text)
+            entry.config(fg="gray")
+    entry.insert(0, placeholder_text)
+    entry.config(fg="gray")
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
 
 # --- CSR Tab Fields ---
 cn_var = tk.StringVar()
@@ -158,17 +170,7 @@ ttk.Button(frm, text="Browse", command=lambda: save_path_var.set(filedialog.askd
 
 ttk.Checkbutton(frm, text="Generate self-signed certificate", variable=self_signed_var).grid(row=row, column=0, columnspan=2, sticky="w")
 row += 1
-ttk.Button(frm, text="Generate CSR", command=lambda: generate()).grid(row=row, column=0, pady=10)
 
-# --- ABOUT TAB ---
-about_text = """CSR Generator v1.1-dev
-
-Created by Mike Binkowski
-GitHub: https://github.com/th3r3isnospoon
-MIT Licensed"""
-tk.Label(about_tab, text=about_text, justify="left", padx=10, pady=10).pack(anchor="nw")
-
-# --- Generate CSR Logic ---
 def generate():
     cn = cn_var.get().strip()
     passwd = pass_var.get().strip()
@@ -203,7 +205,7 @@ def generate():
     conf_file = os.path.join(outdir, "openssl.conf")
 
     with open(conf_file, "w") as f:
-        f.write("[req]\nprompt = no\ndefault_md = sha512\nreq_extensions = req_ext\ndistinguished_name = dn\n\n[ dn ]\n")
+        f.write(f"[req]\nprompt = no\ndefault_md = {hash_sel.lower()}\nreq_extensions = req_ext\ndistinguished_name = dn\n\n[ dn ]\n")
         f.write(f"C={c_var.get()}\nST={st_var.get()}\nL={l_var.get()}\nO={o_var.get()}\nOU={ou_var.get()}\nemailAddress={email}\nCN={cn}\n")
         f.write("\n[ req_ext ]\nsubjectAltName = @alt_names\n\n[ alt_names ]\n")
         for i, dns in enumerate(dns_vars, 1):
@@ -233,6 +235,93 @@ def generate():
     except subprocess.CalledProcessError:
         messagebox.showerror("OpenSSL Error", "An error occurred during CSR or cert generation.")
 
-# --- Run App ---
+ttk.Button(frm, text="Generate CSR", command=generate).grid(row=row, column=0, pady=10)
+
+# --- CSR Viewer ---
+csr_input = scrolledtext.ScrolledText(viewer_tab, height=10, width=90)
+csr_output = scrolledtext.ScrolledText(viewer_tab, height=20, width=90)
+ttk.Label(viewer_tab, text="Paste CSR:").pack(anchor="w", padx=10)
+csr_input.pack(padx=10, pady=5, fill=tk.X)
+ttk.Button(viewer_tab, text="Decode CSR", command=lambda: decode_csr()).pack()
+ttk.Label(viewer_tab, text="Decoded Output:").pack(anchor="w", padx=10)
+csr_output.pack(padx=10, pady=5, fill=tk.BOTH, expand=True)
+
+def decode_csr():
+    with open("/tmp/tmpcsr.csr", "w") as f:
+        f.write(csr_input.get("1.0", tk.END))
+    try:
+        out = subprocess.check_output(["openssl", "req", "-in", "/tmp/tmpcsr.csr", "-noout", "-text"], text=True)
+        csr_output.delete("1.0", tk.END)
+        csr_output.insert(tk.END, out)
+    except subprocess.CalledProcessError:
+        csr_output.insert(tk.END, "Invalid CSR or OpenSSL error.")
+
+# --- Certificate Decoder ---
+cert_input = scrolledtext.ScrolledText(cert_tab, height=10, width=90)
+cert_output = scrolledtext.ScrolledText(cert_tab, height=20, width=90)
+ttk.Label(cert_tab, text="Paste Certificate:").pack(anchor="w", padx=10)
+cert_input.pack(padx=10, pady=5, fill=tk.X)
+ttk.Button(cert_tab, text="Decode Certificate", command=lambda: decode_cert()).pack()
+ttk.Label(cert_tab, text="Decoded Output:").pack(anchor="w", padx=10)
+cert_output.pack(padx=10, pady=5, fill=tk.BOTH, expand=True)
+
+def decode_cert():
+    with open("/tmp/tmpcert.pem", "w") as f:
+        f.write(cert_input.get("1.0", tk.END))
+    try:
+        out = subprocess.check_output(["openssl", "x509", "-in", "/tmp/tmpcert.pem", "-noout", "-text"], text=True)
+        cert_output.delete("1.0", tk.END)
+        cert_output.insert(tk.END, out)
+    except subprocess.CalledProcessError:
+        cert_output.insert(tk.END, "Invalid certificate or OpenSSL error.")
+
+# --- PEM Builder ---
+pem_key = scrolledtext.ScrolledText(pem_tab, height=6, width=90)
+pem_cert = scrolledtext.ScrolledText(pem_tab, height=6, width=90)
+pem_chain = scrolledtext.ScrolledText(pem_tab, height=6, width=90)
+pem_root = scrolledtext.ScrolledText(pem_tab, height=6, width=90)
+ttk.Label(pem_tab, text="Private Key").pack(anchor="w", padx=10)
+pem_key.pack(padx=10)
+ttk.Label(pem_tab, text="End-Entity Certificate (Optional)").pack(anchor="w", padx=10)
+pem_cert.pack(padx=10)
+ttk.Label(pem_tab, text="Intermediate Certificate(s)").pack(anchor="w", padx=10)
+pem_chain.pack(padx=10)
+ttk.Label(pem_tab, text="Root Certificate (Optional)").pack(anchor="w", padx=10)
+pem_root.pack(padx=10)
+
+include_end_cert = tk.BooleanVar(value=True)
+newline_spacing = tk.BooleanVar(value=True)
+ttk.Checkbutton(pem_tab, text="Include end-entity cert at top", variable=include_end_cert).pack(anchor="w", padx=10)
+ttk.Checkbutton(pem_tab, text="Append with newline spacing", variable=newline_spacing).pack(anchor="w", padx=10)
+ttk.Button(pem_tab, text="Build .PEM", command=lambda: build_pem()).pack(pady=10)
+
+def build_pem():
+    parts = []
+    if include_end_cert.get():
+        parts.append(pem_cert.get("1.0", tk.END).strip())
+    parts.append(pem_chain.get("1.0", tk.END).strip())
+    parts.append(pem_root.get("1.0", tk.END).strip())
+    parts.append(pem_key.get("1.0", tk.END).strip())
+    joined = "\n\n".join(filter(None, parts)) if newline_spacing.get() else "\n".join(filter(None, parts))
+    outdir = filedialog.askdirectory(title="Save .PEM to folder")
+    if not outdir:
+        return
+    outfile = os.path.join(outdir, f"combined_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.pem")
+    try:
+        with open(outfile, "w") as f:
+            f.write(joined + "\n")
+        messagebox.showinfo("PEM Created", f"PEM saved to:\n{outfile}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+# --- About Tab ---
+about_text = """CSR Generator v1.1
+
+Created by: Mike Binkowski
+GitHub: https://github.com/th3r3isnospoon
+MIT Licensed"""
+tk.Label(about_tab, text=about_text, justify="left", padx=10, pady=10).pack(anchor="nw")
+
+# --- Launch App ---
 apply_theme()
 root.mainloop()

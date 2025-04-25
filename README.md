@@ -10,25 +10,25 @@
 
 ---
 
-## 🖼️ Preview
+## 🖼️ Preview (v1.1)
 
-### Generate CSR Tab
-![CSR Tab](screenshots/csr_tab.png)
+### Generate CSR Tab  
+<img src="screenshots/csr_generator_v1.1_generate_tab.png" alt="Generate CSR Tab" width="700"/>
 
-### PEM Builder Tab
-![PEM Builder Tab](screenshots/pem_builder_tab.png)
+### PEM Builder Tab  
+<img src="screenshots/csr_generator_v1.1_pem_builder_tab.png" alt="PEM Builder Tab" width="700"/>
 
 ---
 
 ## 🚀 Features
 
 - 🔐 **Generate CSRs** with full subject + SAN fields
-- 🌙 **Dark mode** toggle
-- 🧠 **CSR & Certificate decoder** with OpenSSL output
-- 🧱 **PEM bundle builder** with support for intermediate & root chaining
-- 🧰 **AppImage & Windows .exe support**
-- ✅ Drag-and-drop support (for decoder tabs)
-- 🧪 Self-signed cert toggle
+- 🌙 **Dark mode toggle** (light/dark themes)
+- 🧠 **CSR & Certificate decoder** using OpenSSL
+- 🧱 **PEM builder** with intermediate + root chaining support
+- ✅ **Self-signed certificate option**
+- 🧪 **Drag-and-drop** support (planned)
+- 🖼️ **Screenshots + AppImage/EXE packaging**
 
 ---
 
@@ -37,9 +37,10 @@
 ```
 csr-generator/
 ├── csr_generator_gui_full.py       # Main Python GUI script
-├── build_exe.bat                   # Windows builder
+├── README.md                       # This file
+├── build_exe.bat                   # Windows build script
 ├── CSRGenerator.desktop            # Linux .desktop launcher
-├── AppDir/                         # AppImage structure
+├── AppDir/                         # AppImage directory structure
 ├── ghosttrap.ico                   # Placeholder icon
 ├── screenshots/                    # App screenshots & logo
 └── LICENSE                         # MIT License
@@ -56,9 +57,10 @@ python3 csr_generator_gui_full.py
 ```
 
 ### Windows:
-- Double-click `build_exe.bat` to create `CSR_Generator_GUI.exe` using PyInstaller.
+1. Install Python 3.6+ and OpenSSL
+2. Double-click `build_exe.bat` to package with PyInstaller
 
-### AppImage:
+### AppImage (Linux portable):
 ```bash
 ./appimagetool-x86_64.AppImage CSR-GUI.AppDir
 ```
@@ -67,8 +69,8 @@ python3 csr_generator_gui_full.py
 
 ## 🙌 Contributing
 
-Pull requests welcome! Start by opening an issue or a feature request.  
-Contributions, bug reports, and feedback are all appreciated ❤️
+Pull requests are welcome!  
+Start by opening an issue or a feature suggestion — contributions, bug reports, and ideas are always appreciated ❤️
 
 ---
 
