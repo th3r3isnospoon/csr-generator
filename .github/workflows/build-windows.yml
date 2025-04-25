@@ -2,9 +2,13 @@ name: Build Windows EXE
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag for the build (optional)"
+        required: false
 
 jobs:
   build:
@@ -25,14 +29,10 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller csr_generator_gui_full.py --onefile --noconsole --name csr_generator_gui_${{ github.ref_name }}
+        pyinstaller csr_generator_gui_full.py --onefile --noconsole
 
-    - name: Create GitHub Release and Upload EXE
-      uses: softprops/action-gh-release@v2
+    - name: Upload built EXE as artifact
+      uses: actions/upload-artifact@v4
       with:
-        name: Release ${{ github.ref_name }}
-        tag_name: ${{ github.ref_name }}
-        files: dist/csr_generator_gui_${{ github.ref_name }}.exe
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: csr_generator_gui_full
+        path: dist/csr_generator_gui_full.exe
