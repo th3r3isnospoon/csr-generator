@@ -2,33 +2,34 @@ name: Build Windows EXE
 
 on:
   push:
-    tags:
-      - 'v*'   # Only run when you push a tag like v1.1, v1.2
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    permissions:
-      contents: write   # <-- needed for uploading to releases
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install requirements
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller pillow
+    - name: Install requirements
+      run: |
+        pip install pyinstaller
 
-      - name: Build EXE with PyInstaller
-        run: |
-          pyinstaller --onefile --windowed --icon=ghosttrap.ico csr_generator_gui_full.py
+    - name: Build EXE
+      run: |
+        pyinstaller csr_generator_gui_full.py --onefile --noconsole
 
-      - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/csr_generator_gui_full.exe
+    - name: Upload EXE
+      uses: softprops/action-gh-release@v2
+      with:
+        files: dist/csr_generator_gui_full.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
