@@ -42,3 +42,22 @@ OpenSSL 3.5.7, the full suite passed: **38 tests, zero failures or skips**, with
 visually inspected at 960×860, and bundle controls were checked at 680×560.
 Windows and macOS execution, remote GitHub Actions runs, and screen-reader testing
 remain unverified locally. The Windows permission-command tests use mocks here.
+
+## Development commands
+
+```sh
+python -m pip install -r requirements-build.txt
+python -m pip install --no-build-isolation --no-deps -e .
+python -m ruff check .
+python -m ruff format --check .
+python -m unittest discover -v
+```
+
+The OpenSSL tests are explicitly skipped if the executable is missing; CI requires
+it so these checks cannot silently disappear. GUI tests are opt-in:
+
+```sh
+CSR_GUI_TESTS=1 python -m unittest tests.test_gui -v
+# On a headless Linux machine with Xvfb installed:
+xvfb-run -a env CSR_GUI_TESTS=1 python -m unittest tests.test_gui -v
+```
