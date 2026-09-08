@@ -1,6 +1,8 @@
-![CSR Generator logo](screenshots/logo.png)
-
 # CSR Generator 2.0
+
+<p align="center">
+  <img src="screenshots/logo.png" alt="CSR Generator logo" width="200"/>
+</p>
 
 A local desktop application and CLI for generating certificate signing requests,
 inspecting CSRs/certificates, and exporting validated PEM or PKCS#12 bundles.
