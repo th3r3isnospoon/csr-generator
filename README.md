@@ -1,3 +1,5 @@
+![CSR Generator logo](screenshots/logo.png)
+
 # CSR Generator 2.0
 
 A local desktop application and CLI for generating certificate signing requests,
