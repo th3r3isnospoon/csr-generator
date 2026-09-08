@@ -1,5 +1,3 @@
-![CSR Generator logo](screenshots/logo.png)
-
 # CSR Generator 2.0
 
 <p align="center">
