@@ -1,6 +1,17 @@
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
+.venv*/
 dist/
 build/
-*.spec
+.ruff_cache/
+.coverage
+htmlcov/
 *.AppImage
+# Never accidentally commit generated private material.
+*.key
+*.pem
+*.csr
+*.crt
+*.p12
+*.pfx

@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "csr-generator"
+dynamic = ["version"]
+description = "Local CSR, certificate inspection, and validated PEM tools"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Mike Binkowski"}]
+dependencies = ["cryptography>=46.0.7,<47", "idna>=3.19,<4"]
+
+[project.scripts]
+csr-generator = "csr_generator.cli:main"
+
+[project.gui-scripts]
+csr-generator-gui = "csr_generator.gui:main"
+
+[tool.setuptools.packages.find]
+include = ["csr_generator*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.setuptools.dynamic]
+version = {attr = "csr_generator.__version__"}

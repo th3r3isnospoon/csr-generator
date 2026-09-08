@@ -1,8 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=CSR Generator
-Comment=Requires csr-generator-gui installed on PATH
+Comment=Generate CSRs and inspect certificates locally
 Exec=csr-generator-gui
 Icon=csr-generator
 Terminal=false
 Categories=Utility;Security;
+StartupNotify=true

@@ -1,0 +1,7 @@
+include LICENSE README.md CHANGELOG.md SECURITY.md requirements-build.txt build_exe.bat csr_generator_gui_full.py
+recursive-include docs *.md
+recursive-include packaging *.spec *.desktop *.svg *.png *.ico AppRun
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include .github *.yml
+include screenshots/v2-*.png
