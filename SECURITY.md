@@ -19,3 +19,25 @@ POSIX permissions are explicit; Windows removes inherited ACLs and applies a use
 grant before writing secrets, failing closed when the OS tools cannot do so. Python and Tk cannot
 guarantee zeroization. No certificate trust installation or network trust validation
 is performed. Keep cryptography, Python/Tk, and optional OpenSSL patched.
+
+## Storage, input handling, and validation limits
+
+- Protect output folders. POSIX output directories are `0700` and files are `0600`.
+  On Windows, v2 removes inherited ACL entries and grants the current user full
+  access on new output objects before writing secrets, using System32 `whoami` and
+  `icacls`. If this fails, the operation stops. Administrator access is not prevented;
+  actual Windows behavior still needs target-platform validation.
+- Python cannot guarantee secure erasure of passwords or key material from memory.
+  Do not paste secrets on a shared desktop. Profiles contain identities/SANs but no
+  keys, passphrases, or key paths.
+- PEM input is limited to 2 MiB and profiles to 64 KiB. Files must be PEM, not DER.
+- DNS names use IDNA normalization. Wildcards are restricted to a complete leftmost
+  label. This does not check public suffixes, CA policy, or domain ownership.
+- No network validation, trust-store modification, certificate installation, or automatic updates occur.
+- OpenSSL details use argument arrays, standard input, no temporary input files,
+  and a timeout. Generation does not invoke a shell or write OpenSSL configuration.
+
+
+Certificate decoding and adjacent issuer checks do not establish trust or perform full
+RFC 5280 path validation, revocation, hostname, policy, or trust-store checks.
+See the [user guide](docs/usage.md#inspect-and-export) for export behavior.

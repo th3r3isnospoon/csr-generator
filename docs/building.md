@@ -4,6 +4,37 @@ No build script or GitHub workflow publishes a release. CI has read-only reposit
 permissions and uploads temporary build artifacts only, including for version tags.
 A maintainer must review and approve distribution separately.
 
+## Install from source
+
+Python **3.11–3.14** is the intended support range. Python 3.12 is used for binary builds.
+The GUI requires Tk; the CLI does not require a display. Runtime dependencies are
+`cryptography` and `idna`. The external `openssl` executable is optional for detailed
+inspection and required to run the independent integration tests.
+
+On Debian/Ubuntu, install `python3`, `python3-venv`, and `python3-tk` through your package manager.
+Then, from this checkout:
+
+```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install .
+csr-generator-gui
+```
+
+On Windows, use Python from python.org with Tcl/Tk enabled:
+
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install .
+.venv\Scripts\csr-generator-gui.exe
+```
+
+On macOS, a python.org Python installation includes Tk. Source/CLI support is included
+in the CI matrix; that configuration alone does not establish successful execution; a signed/notarized macOS app is not provided.
+
+From a checkout with dependencies installed, `python csr_generator_gui_full.py`
+remains a compatibility launcher. You can also use `csr-generator gui`.
+
 ## Portable folders
 
 Use Python 3.12 with Tk available, ideally in a clean virtual environment:
