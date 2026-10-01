@@ -1,6 +1,6 @@
 # Tested build environment; refresh intentionally with regression and artifact tests.
 cryptography==50.0.1
-idna==3.19
+idna==3.20
 cffi==2.1.1
 pycparser==3.0
 setuptools==84.0.0
