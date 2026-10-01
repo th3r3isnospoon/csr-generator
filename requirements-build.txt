@@ -10,7 +10,7 @@ altgraph==0.17.5
 packaging==26.3
 build==1.6.0
 pyproject-hooks==1.2.0
-ruff==0.16.6
+ruff==0.16.9
 pefile==2024.8.26; sys_platform == 'win32'
 pywin32-ctypes==0.2.3; sys_platform == 'win32'
 wheel==0.48.0
